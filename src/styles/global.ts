@@ -25,5 +25,6 @@ export const GlobalStyles = createGlobalStyle`
   button {
     cursor: pointer;
     border: 0;
+    border-radius: 6px;
   }
 `;
