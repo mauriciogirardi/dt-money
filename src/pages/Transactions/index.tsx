@@ -1,10 +1,16 @@
 import { Calendar } from "phosphor-react";
-import { Header } from "../../components/Header";
-import { Summary } from "../../components/Summary";
+
+import { useTransaction } from "../../context/TransactionsContext";
 import { SearchForm } from "./components/SearchForm";
+import { Loading } from "../../components/Loading";
+import { Summary } from "../../components/Summary";
+import { Header } from "../../components/Header";
+
 import * as S from "./styles";
 
 export function Transactions() {
+  const { transactions, isFetchingTransaction } = useTransaction();
+
   return (
     <>
       <Header />
@@ -13,41 +19,31 @@ export function Transactions() {
       <S.Container>
         <SearchForm />
 
-        <S.TransactionTable>
-          <tbody>
-            <tr>
-              <td width="50%">Desenvolvimento de site</td>
-              <td>
-                <S.PriceHighlight variant="income">
-                  R$ 12.365,23
-                </S.PriceHighlight>
-              </td>
-              <td>Venda</td>
-              <td>
-                <S.DateTable>
-                  <Calendar size={22} />
-                  12/08/2022
-                </S.DateTable>
-              </td>
-            </tr>
-
-            <tr>
-              <td width="50%">Supermercado</td>
-              <td>
-                <S.PriceHighlight variant="outcome">
-                  - R$ 365,23
-                </S.PriceHighlight>
-              </td>
-              <td>Compra</td>
-              <td>
-                <S.DateTable>
-                  <Calendar size={22} />
-                  12/08/2022
-                </S.DateTable>
-              </td>
-            </tr>
-          </tbody>
-        </S.TransactionTable>
+        {isFetchingTransaction ? (
+          <Loading text="Carregando transações..." />
+        ) : (
+          <S.TransactionTable>
+            <tbody>
+              {transactions.map((transaction) => (
+                <tr key={transaction.id}>
+                  <td width="50%">{transaction.description}</td>
+                  <td>
+                    <S.PriceHighlight variant={transaction.type}>
+                      {transaction.formattedPrice}
+                    </S.PriceHighlight>
+                  </td>
+                  <td>{transaction.category}</td>
+                  <td>
+                    <S.DateTable>
+                      <Calendar size={22} />
+                      {transaction.createdAt}
+                    </S.DateTable>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </S.TransactionTable>
+        )}
       </S.Container>
     </>
   );
