@@ -1,3 +1,4 @@
+import { Calendar } from "phosphor-react";
 import { Header } from "../../components/Header";
 import { Summary } from "../../components/Summary";
 import { SearchForm } from "./components/SearchForm";
@@ -22,7 +23,12 @@ export function Transactions() {
                 </S.PriceHighlight>
               </td>
               <td>Venda</td>
-              <td>12/08/2022</td>
+              <td>
+                <S.DateTable>
+                  <Calendar size={22} />
+                  12/08/2022
+                </S.DateTable>
+              </td>
             </tr>
 
             <tr>
@@ -33,7 +39,12 @@ export function Transactions() {
                 </S.PriceHighlight>
               </td>
               <td>Compra</td>
-              <td>12/08/2022</td>
+              <td>
+                <S.DateTable>
+                  <Calendar size={22} />
+                  12/08/2022
+                </S.DateTable>
+              </td>
             </tr>
           </tbody>
         </S.TransactionTable>

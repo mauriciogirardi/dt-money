@@ -16,6 +16,11 @@ export const Container = styled.section`
   gap: 2rem;
 
   margin-top: -5rem;
+
+  @media (max-width: 768px) {
+    overflow-x: auto;
+    padding-bottom: 1rem;
+  }
 `;
 
 export const SummaryCard = styled.div<SummaryCardProps>`
@@ -34,5 +39,9 @@ export const SummaryCard = styled.div<SummaryCardProps>`
     display: block;
     margin-top: 1rem;
     font-size: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    width: 300px;
   }
 `;

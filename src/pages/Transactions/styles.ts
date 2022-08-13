@@ -29,9 +29,41 @@ export const TransactionTable = styled.table`
       border-bottom-right-radius: 6px;
     }
   }
+
+  @media (max-width: 600px) {
+    tr {
+      background-color: ${({ theme }) => theme["gray-600"]};
+    }
+
+    td {
+      padding: 0.6rem 2rem;
+      display: block;
+      width: 100%;
+
+      &:first-child {
+        padding-top: 1.5rem;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        border-bottom-left-radius: 0;
+      }
+
+      &:last-child {
+        padding-bottom: 1.5rem;
+        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 6px;
+        border-top-right-radius: 0;
+      }
+    }
+  }
 `;
 
 export const PriceHighlight = styled.span<PriceHighlightProps>`
   color: ${({ theme, variant }) =>
     variant === "income" ? theme["green-500"] : theme["red-300"]};
+`;
+
+export const DateTable = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 `;
