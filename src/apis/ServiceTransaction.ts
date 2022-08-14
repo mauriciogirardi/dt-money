@@ -13,10 +13,25 @@ export class ServiceTransactions {
   protected static getData = getData;
 
   static getAllTransactions<T>() {
-    return this.Http.get<T>("/transactions").then(this.getData);
+    return this.Http.get<T>("/transactions", {
+      params: { _sort: "createdAt", _order: "desc" },
+    }).then(this.getData);
   }
 
   static queryTransactions<T>(query: string) {
-    return this.Http.get<T>(`/transactions?q=${query}`).then(this.getData);
+    return this.Http.get<T>("/transactions", {
+      params: {
+        q: query,
+        _sort: "createdAt",
+        _order: "desc",
+      },
+    }).then(this.getData);
+  }
+
+  static createTransactions<T>(data: T) {
+    return this.Http.post("/transactions", {
+      ...data,
+      createdAt: new Date(),
+    }).then(this.getData);
   }
 }

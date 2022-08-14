@@ -19,10 +19,18 @@ interface Transaction {
   formattedPrice: string;
 }
 
+interface NewTransaction {
+  description: string;
+  category: string;
+  price: number;
+  type: "income" | "outcome";
+}
+
 interface TransactionContextType {
   transactions: Transaction[];
   isFetchingTransaction: boolean;
   fetchTransactions: (query?: string) => Promise<void>;
+  createTransaction: (data: NewTransaction) => Promise<void>;
 }
 
 interface TransactionProviderProps {
@@ -34,6 +42,14 @@ const TransactionContext = createContext({} as TransactionContextType);
 export function TransactionProvider({ children }: TransactionProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isFetchingTransaction, setIsFetchingTransaction] = useState(false);
+
+  const parsedData = (data: Transaction[]): Transaction[] => {
+    return data.map((transaction) => ({
+      ...transaction,
+      formattedPrice: formattedCurrency(transaction.price),
+      createdAt: formattedDate(transaction.createdAt),
+    }));
+  };
 
   async function fetchTransactions(query?: string) {
     try {
@@ -48,17 +64,34 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
         data = await ServiceTransactions.getAllTransactions<Transaction[]>();
       }
 
-      const parsedData = data.map((transaction) => ({
-        ...transaction,
-        formattedPrice: formattedCurrency(transaction.price),
-        createdAt: formattedDate(transaction.createdAt),
-      }));
-
-      setTransactions(parsedData);
+      setTransactions(parsedData(data));
     } catch (error) {
       console.error(error);
     } finally {
       setIsFetchingTransaction(false);
+    }
+  }
+
+  async function createTransaction({
+    category,
+    description,
+    price,
+    type,
+  }: NewTransaction) {
+    try {
+      const newTransaction =
+        await ServiceTransactions.createTransactions<NewTransaction>({
+          category,
+          description,
+          price,
+          type,
+        });
+
+      setTransactions((prevState) =>
+        parsedData([newTransaction, ...prevState])
+      );
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -71,6 +104,7 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
       value={{
         isFetchingTransaction,
         fetchTransactions,
+        createTransaction,
         transactions,
       }}
     >
