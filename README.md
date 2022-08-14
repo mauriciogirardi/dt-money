@@ -2,9 +2,10 @@
   <img src=".github/logo2.svg" width="300">
 </div>
 
-#### [Access Coffee Delivery](https://coffee-delivery-mg.vercel.app/)
-
 ### :hammer: About the application
+
+This is an application for financial control at td-money, where you will have
+a control of your expenses, you will be able to manage your expenses.
 
 </br>
 </br>
