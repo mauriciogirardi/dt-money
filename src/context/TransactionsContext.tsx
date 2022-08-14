@@ -22,6 +22,7 @@ interface Transaction {
 interface TransactionContextType {
   transactions: Transaction[];
   isFetchingTransaction: boolean;
+  fetchTransactions: (query?: string) => Promise<void>;
 }
 
 interface TransactionProviderProps {
@@ -34,29 +35,34 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isFetchingTransaction, setIsFetchingTransaction] = useState(false);
 
-  useEffect(() => {
-    async function fetchTransactions() {
-      try {
-        setIsFetchingTransaction(true);
+  async function fetchTransactions(query?: string) {
+    try {
+      setIsFetchingTransaction(true);
+      let data: Transaction[] = [];
 
-        const data = await ServiceTransactions.getAllTransactions<
-          Transaction[]
-        >();
-
-        const parsedData = data.map((transaction) => ({
-          ...transaction,
-          formattedPrice: formattedCurrency(transaction.price),
-          createdAt: formattedDate(transaction.createdAt),
-        }));
-
-        setTransactions(parsedData);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setIsFetchingTransaction(false);
+      if (query) {
+        data = await ServiceTransactions.queryTransactions<Transaction[]>(
+          query
+        );
+      } else {
+        data = await ServiceTransactions.getAllTransactions<Transaction[]>();
       }
-    }
 
+      const parsedData = data.map((transaction) => ({
+        ...transaction,
+        formattedPrice: formattedCurrency(transaction.price),
+        createdAt: formattedDate(transaction.createdAt),
+      }));
+
+      setTransactions(parsedData);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsFetchingTransaction(false);
+    }
+  }
+
+  useEffect(() => {
     fetchTransactions();
   }, []);
 
@@ -64,6 +70,7 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
     <TransactionContext.Provider
       value={{
         isFetchingTransaction,
+        fetchTransactions,
         transactions,
       }}
     >

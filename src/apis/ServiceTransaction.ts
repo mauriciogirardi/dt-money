@@ -15,4 +15,8 @@ export class ServiceTransactions {
   static getAllTransactions<T>() {
     return this.Http.get<T>("/transactions").then(this.getData);
   }
+
+  static queryTransactions<T>(query: string) {
+    return this.Http.get<T>(`/transactions?q=${query}`).then(this.getData);
+  }
 }
