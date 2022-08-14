@@ -32,9 +32,15 @@ export const SearchButton = styled.button`
   font-weight: bold;
   transition: all 0.2s;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: ${({ theme }) => theme["green-300"]};
     color: ${({ theme }) => theme.white};
     border: 1px solid transparent;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    color: ${({ theme }) => theme["gray-400"]};
+    border: 1px solid ${({ theme }) => theme["gray-400"]};
   }
 `;

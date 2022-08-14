@@ -10,6 +10,7 @@
     "server": "json-server -p 3333 server.json -w -d 1000"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.9.7",
     "@radix-ui/react-dialog": "^1.0.0",
     "@radix-ui/react-radio-group": "^1.0.0",
     "axios": "^0.27.2",
@@ -17,8 +18,10 @@
     "react": "^18.2.0",
     "react-countup": "^6.3.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.34.1",
     "react-router-dom": "^6.3.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "zod": "^3.18.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",
