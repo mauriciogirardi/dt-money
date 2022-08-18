@@ -10,7 +10,7 @@ a control of your expenses, you will be able to manage your expenses.
 </br>
 </br>
 <div align="center">
-  <img src=".github/tdMoney.gif" >
+  <img src=".github/dtMoney.gif" >
 </div>
 </br>
 </br>
