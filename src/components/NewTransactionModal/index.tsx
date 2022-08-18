@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 import * as S from "./styles";
-import { useTransaction } from "../../context/TransactionsContext";
+import { useContextSelector } from "use-context-selector";
+import { TransactionContext } from "../../context/TransactionsContext";
 
 const newTransactionSchema = z.object({
   description: z.string(),
@@ -17,7 +18,10 @@ const newTransactionSchema = z.object({
 type NewTransactionInputs = z.infer<typeof newTransactionSchema>;
 
 export function NewTransactionModal() {
-  const { createTransaction } = useTransaction();
+  const createTransaction = useContextSelector(
+    TransactionContext,
+    (ctx) => ctx.createTransaction
+  );
 
   const {
     control,

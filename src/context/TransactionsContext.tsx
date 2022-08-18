@@ -1,10 +1,6 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
+import { createContext } from "use-context-selector";
+
 import { ServiceTransactions } from "../apis/ServiceTransaction";
 import { formattedCurrency } from "../utils/formattedCurrency";
 import { formattedDate } from "../utils/formattedDate";
@@ -37,7 +33,7 @@ interface TransactionProviderProps {
   children: ReactNode;
 }
 
-const TransactionContext = createContext({} as TransactionContextType);
+export const TransactionContext = createContext({} as TransactionContextType);
 
 export function TransactionProvider({ children }: TransactionProviderProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -51,7 +47,7 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
     }));
   };
 
-  async function fetchTransactions(query?: string) {
+  const fetchTransactions = useCallback(async (query?: string) => {
     try {
       setIsFetchingTransaction(true);
       let data: Transaction[] = [];
@@ -70,34 +66,32 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
     } finally {
       setIsFetchingTransaction(false);
     }
-  }
+  }, []);
 
-  async function createTransaction({
-    category,
-    description,
-    price,
-    type,
-  }: NewTransaction) {
-    try {
-      const newTransaction =
-        await ServiceTransactions.createTransactions<NewTransaction>({
-          category,
-          description,
-          price,
-          type,
-        });
+  const createTransaction = useCallback(
+    async ({ category, description, price, type }: NewTransaction) => {
+      try {
+        const newTransaction =
+          await ServiceTransactions.createTransactions<NewTransaction>({
+            category,
+            description,
+            price,
+            type,
+          });
 
-      setTransactions((prevState) =>
-        parsedData([newTransaction, ...prevState])
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  }
+        setTransactions((prevState) =>
+          parsedData([newTransaction, ...prevState])
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     fetchTransactions();
-  }, []);
+  }, [fetchTransactions]);
 
   return (
     <TransactionContext.Provider
@@ -112,8 +106,3 @@ export function TransactionProvider({ children }: TransactionProviderProps) {
     </TransactionContext.Provider>
   );
 }
-
-export const useTransaction = () => {
-  const context = useContext(TransactionContext);
-  return context;
-};

@@ -55,6 +55,14 @@
       "type": "outcome",
       "createdAt": "2022-08-14T19:06:19.888Z",
       "id": 7
+    },
+    {
+      "category": "Compra",
+      "description": "Compra de moveis",
+      "price": 58,
+      "type": "outcome",
+      "createdAt": "2022-08-18T20:54:47.570Z",
+      "id": 8
     }
   ]
 }

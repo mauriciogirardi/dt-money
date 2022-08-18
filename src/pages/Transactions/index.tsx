@@ -1,15 +1,24 @@
 import { Calendar } from "phosphor-react";
 
-import { useTransaction } from "../../context/TransactionsContext";
 import { SearchForm } from "./components/SearchForm";
 import { Loading } from "../../components/Loading";
 import { Summary } from "../../components/Summary";
 import { Header } from "../../components/Header";
 
 import * as S from "./styles";
+import { useContextSelector } from "use-context-selector";
+import { TransactionContext } from "../../context/TransactionsContext";
 
 export function Transactions() {
-  const { transactions, isFetchingTransaction } = useTransaction();
+  const { isFetchingTransaction, transactions } = useContextSelector(
+    TransactionContext,
+    (ctx) => {
+      return {
+        isFetchingTransaction: ctx.isFetchingTransaction,
+        transactions: ctx.transactions,
+      };
+    }
+  );
 
   return (
     <>
